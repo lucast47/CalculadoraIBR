@@ -3,211 +3,211 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Calculadora Bancoldex</title>
+<title>Calculadora IBR Bancoldex</title>
 <style>
-  :root{
-    --primary:#2563eb;
-    --primary-dark: #1e40af;
-    --surface:#f8fafc;
-    --blue-light: #eff6ff;
-    --blue-border: #bfdbfe;
-    --error: #dc2626;
-  }
-  body{
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background: var(--surface);
-    margin: 20px;
-    color:#111827;
-  }
-  h1{ text-align:center; color:#0f172a; margin-bottom:24px; font-weight: 800; }
-  
-  .card{
-    max-width:1150px;
-    margin:0 auto;
-    background:#fff;
-    border-radius:16px;
-    box-shadow:0 10px 25px rgba(15,23,42,0.1);
-    overflow: hidden;
-  }
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --surface: #f8fafc;
+    --blue-light: #eff6ff;
+    --blue-border: #bfdbfe;
+    --error: #dc2626;
+  }
+  body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--surface);
+    margin: 20px;
+    color: #111827;
+  }
+  h1 { text-align: center; color: #0f172a; margin-bottom: 24px; font-weight: 800; }
+  
+  .card {
+    max-width: 1150px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(15,23,42,0.1);
+    overflow: hidden;
+  }
 
-  .form-section {
-    background: var(--blue-light);
-    padding: 28px;
-    border-bottom: 1px solid var(--blue-border);
-  }
-  
-  form{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap:20px;
-    align-items:end;
-  }
-  label{ display:block; font-weight:700; margin-bottom:8px; font-size:0.85rem; color:#1e40af; text-transform: uppercase; letter-spacing: 0.5px;}
-  select, input{
-    width:100%;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid var(--blue-border);
-    font-size:1rem;
-    box-sizing:border-box;
-    background: #fff;
-  }
+  .form-section {
+    background: var(--blue-light);
+    padding: 28px;
+    border-bottom: 1px solid var(--blue-border);
+  }
+  
+  form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    align-items: end;
+  }
+  label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.85rem; color: #1e40af; text-transform: uppercase; letter-spacing: 0.5px; }
+  select, input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--blue-border);
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: #fff;
+  }
 
-  .warning { color: var(--error); font-size: 0.7rem; font-weight: 700; margin-top: 4px; display: none; }
+  .warning { color: var(--error); font-size: 0.7rem; font-weight: 700; margin-top: 4px; display: none; }
 
-  .info-container {
-    margin: 24px;
-    border: 2px solid var(--blue-border);
-    border-radius: 12px;
-    background: #fff;
-  }
+  .info-container {
+    margin: 24px;
+    border: 2px solid var(--blue-border);
+    border-radius: 12px;
+    background: #fff;
+  }
 
-  .info-summary {
-    padding: 20px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    background: #fff;
-    border-radius: 12px;
-  }
-  
-  .summary-item { display: flex; flex-direction: column; }
-  .summary-item strong { font-size: 0.85rem; color: var(--primary-dark); text-transform: uppercase; margin-bottom: 4px;}
-  .summary-item span { font-size: 1.8rem; font-weight: 900; color: #0f172a; }
+  .info-summary {
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: #fff;
+    border-radius: 12px;
+  }
+  
+  .summary-item { display: flex; flex-direction: column; }
+  .summary-item strong { font-size: 0.85rem; color: var(--primary-dark); text-transform: uppercase; margin-bottom: 4px; }
+  .summary-item span { font-size: 1.8rem; font-weight: 900; color: #0f172a; }
 
-  .toggle-icon {
-    width: 28px;
-    height: 28px;
-    transition: transform 0.3s;
-    fill: var(--primary);
-  }
-  .is-open .toggle-icon { transform: rotate(180deg); }
+  .toggle-icon {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s;
+    fill: var(--primary);
+  }
+  .is-open .toggle-icon { transform: rotate(180deg); }
 
-  .info-details {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-out, opacity 0.3s;
-    opacity: 0;
-    padding: 0 30px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-  }
-  .is-open .info-details {
-    max-height: 450px;
-    opacity: 1;
-    padding-bottom: 30px;
-    border-top: 1px solid var(--blue-light);
-    padding-top: 20px;
-  }
+  .info-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.3s;
+    opacity: 0;
+    padding: 0 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .is-open .info-details {
+    max-height: 450px;
+    opacity: 1;
+    padding-bottom: 30px;
+    border-top: 1px solid var(--blue-light);
+    padding-top: 20px;
+  }
 
-  .detail-item strong { display: block; font-size: 0.75rem; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
-  .detail-item span { font-size: 1rem; font-weight: 700; color: #1e293b; }
+  .detail-item strong { display: block; font-size: 0.75rem; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
+  .detail-item span { font-size: 1rem; font-weight: 700; color: #1e293b; }
 
-  .table-container { margin: 0 24px 24px 24px; overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; }
-  table { width:100%; border-collapse:collapse; }
-  th, td { padding:14px; text-align:right; font-size:0.85rem; border-bottom: 1px solid #f1f5f9; }
-  thead th { background: var(--primary); color:#fff; font-weight: 600; }
-  tfoot td { background: #f8fafc; font-weight: 800; color: var(--primary-dark); border-top: 2px solid var(--blue-border); }
+  .table-container { margin: 0 24px 24px 24px; overflow-x: auto; border-radius: 8px; border: 1px solid #e2e8f0; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 14px; text-align: right; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; }
+  thead th { background: var(--primary); color: #fff; font-weight: 600; }
+  tfoot td { background: #f8fafc; font-weight: 800; color: var(--primary-dark); border-top: 2px solid var(--blue-border); }
 </style>
 </head>
 <body>
 
-  <h1>Calculadora IBR Especializada</h1>
+  <h1>Simulador IBR (Bancoldex)</h1>
 
-  <div class="card">
-    <div class="form-section">
-      <form id="form">
-        <div>
-          <label>Destino</label>
-          <select id="destino">
-            <option value="CAPITAL_TRABAJO">Capital de Trabajo</option>
-            <option value="MODERNIZACION">Modernización Empresarial</option>
-          </select>
-        </div>
-        <div>
-          <label>Monto solicitado</label>
-          <input id="monto" type="text" placeholder="$0" required />
-          <div id="errorMonto" class="warning">Rango: $10.5M a $43.7M</div>
-        </div>
-        <div>
-          <label>Plazo (Meses)</label>
-          <input id="plazo" type="number" min="1" max="60" value="12" required />
-          <div id="errorPlazo" class="warning">Plazo no permitido</div>
-        </div>
-        <div>
-          <label>IBR Actual (%)</label>
-          <input id="ibr" type="number" step="0.01" value="10.50" />
-        </div>
-        <div>
-          <label>MIPYME</label>
-          <select id="aplicaMipyme">
-            <option value="SI">SÍ</option>
-            <option value="NO">NO</option>
-          </select>
-        </div>
-        <div>
-          <label>Género</label>
-          <select id="genero">
-            <option value="F">Femenino</option>
-            <option value="M">Masculino</option>
-          </select>
-        </div>
-        <div>
-          <label>Edad</label>
-          <select id="edad"></select>
-        </div>
-      </form>
-    </div>
+  <div class="card">
+    <div class="form-section">
+      <form id="form">
+        <div>
+          <label>Destino</label>
+          <select id="destino">
+            <option value="CAPITAL_TRABAJO">Capital de Trabajo</option>
+            <option value="MODERNIZACION">Modernización Empresarial</option>
+          </select>
+        </div>
+        <div>
+          <label>Monto solicitado</label>
+          <input id="monto" type="text" placeholder="$0" required />
+          <div id="errorMonto" class="warning">Rango: $10.5M a $43.7M</div>
+        </div>
+        <div>
+          <label>Plazo (Meses)</label>
+          <input id="plazo" type="number" min="1" max="60" value="12" required />
+          <div id="errorPlazo" class="warning">Plazo no permitido</div>
+        </div>
+        <div>
+          <label>IBR Actual (%)</label>
+          <input id="ibr" type="number" step="0.01" value="10.50" />
+        </div>
+        <div>
+          <label>MIPYME</label>
+          <select id="aplicaMipyme">
+            <option value="SI">SÍ</option>
+            <option value="NO">NO</option>
+          </select>
+        </div>
+        <div>
+          <label>Género</label>
+          <select id="genero">
+            <option value="F">Femenino</option>
+            <option value="M" selected>Masculino</option>
+          </select>
+        </div>
+        <div>
+          <label>Edad</label>
+          <select id="edad"></select>
+        </div>
+      </form>
+    </div>
 
-    <div class="info-container" id="infoContainer" style="display:none;">
-      <div class="info-summary" onclick="toggleDetails()">
-        <div class="summary-item">
-          <strong>Primera Cuota Aproximada</strong>
-          <span id="cuotaInicial"></span>
-        </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/></svg>
-        </div>
-      </div>
-      
-      <div class="info-details" id="infoDetails">
-        <div class="detail-item"><strong>Spread</strong><span id="spreadValue"></span></div>
-        <div class="detail-item"><strong>Tasa Total (EA)</strong><span id="tasaEA"></span></div>
-        <div class="detail-item"><strong>Abono a Capital</strong><span id="abonoFijo"></span></div>
-        <div class="detail-item"><strong>Comisión MIPYME (Mes)</strong><span id="mipymeResumen"></span></div>
-        <div class="detail-item"><strong>Seguro Mensual</strong><span id="seguroResumen"></span></div>
-        <div class="detail-item"><strong>Última Cuota</strong><span id="cuotaFinal" style="color: var(--primary); font-weight: 900;"></span></div>
-      </div>
-    </div>
+    <div class="info-container" id="infoContainer" style="display:none;">
+      <div class="info-summary" onclick="toggleDetails()">
+        <div class="summary-item">
+          <strong>Primera Cuota Aproximada</strong>
+          <span id="cuotaInicial"></span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/></svg>
+        </div>
+      </div>
+      
+      <div class="info-details" id="infoDetails">
+        <div class="detail-item"><strong>Tasa adicional</strong><span id="spreadValue"></span></div>
+        <div class="detail-item"><strong>Tasa Total (EA)</strong><span id="tasaEA"></span></div>
+        <div class="detail-item"><strong>Abono a Capital</strong><span id="abonoFijo"></span></div>
+        <div class="detail-item"><strong>MIPYME</strong><span id="mipymeResumen"></span></div>
+        <div class="detail-item"><strong>Seguro Mensual</strong><span id="seguroResumen"></span></div>
+        <div class="detail-item"><strong>Última Cuota</strong><span id="cuotaFinal" style="color: var(--primary); font-weight: 900;"></span></div>
+      </div>
+    </div>
 
-    <div class="table-container">
-      <table id="tablaResultados" style="display:none;">
-        <thead>
-          <tr>
-            <th style="text-align:left">Mes</th>
-            <th>Cuota Total</th>
-            <th>Capital</th>
-            <th>Interés</th>
-            <th>MIPYME</th>
-            <th>Seguro</th>
-            <th>Saldo</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <tr id="filaTotales"></tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
+    <div class="table-container">
+      <table id="tablaResultados" style="display:none;">
+        <thead>
+          <tr>
+            <th style="text-align:left">Mes</th>
+            <th>Cuota Total</th>
+            <th>Capital</th>
+            <th>Interés</th>
+            <th>MIPYME</th>
+            <th>Seguro</th>
+            <th>Saldo</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr id="filaTotales"></tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 
 <script>
 const CONFIG = {
-  LIMITES: { MIN: 10505431, MAX: 43772625 },
-  SMMLV: 1750000,
-  MIPYME_LIMITE_SMMLV: 4
+  LIMITES: { MIN: 10505431, MAX: 43772625 },
+  SMMLV: 1750000,
+  MIPYME_LIMITE_SMMLV: 4
 };
 
 const factoresSeguroVida={M:{18:0.377,19:0.377,20:0.377,21:0.383,22:0.390,23:0.397,24:0.404,25:0.409,26:0.415,27:0.419,28:0.426,29:0.432,30:0.437,31:0.444,32:0.451,33:0.459,34:0.469,35:0.479,36:0.479,37:0.490,38:0.502,39:0.516,40:0.532,41:0.547,42:0.565,43:0.581,44:0.600,45:0.620,46:0.641,47:0.663,48:0.693,49:0.727,50:0.765,51:0.852,52:0.909,53:0.979,54:1.060,55:1.155,56:1.158,57:1.274,58:1.410,59:1.562,60:1.727,61:2.331,62:2.542,63:2.760,64:2.968,65:3.177,66:3.382,67:3.591,68:3.866,69:4.116,70:4.397,71:3.068,72:3.347,73:3.719,74:4.194,75:4.788,76:5.520,77:6.410,78:7.507,79:8.990,80:10.937,81:10.937,82:10.937,83:10.937,84:10.937,85:10.937},F:{18:0.377,19:0.377,20:0.377,21:0.377,22:0.377,23:0.377,24:0.377,25:0.383,26:0.383,27:0.390,28:0.397,29:0.404,30:0.409,31:0.415,32:0.419,33:0.426,34:0.432,35:0.437,36:0.444,37:0.451,38:0.459,39:0.469,40:0.479,41:0.479,42:0.490,43:0.502,44:0.516,45:0.532,46:0.547,47:0.565,48:0.581,49:0.600,50:0.620,51:0.620,52:0.677,53:0.699,54:0.731,55:0.767,56:0.807,57:0.852,58:0.909,59:0.979,60:1.060,61:1.155,62:1.423,63:1.566,64:1.733,65:1.920,66:2.122,67:2.331,68:2.542,69:2.760,70:2.968,71:3.177,72:3.382,73:3.591,74:3.866,75:4.116,76:4.397,77:3.068,78:3.347,79:3.719,80:4.194,81:4.788,82:5.520,83:6.410,84:7.507,85:10.937}};
@@ -216,130 +216,133 @@ function formatoCOP(n){return"$"+Math.round(n).toLocaleString("es-CO");}
 function limpiarNumero(v){return parseInt(String(v||"").replace(/[^\d]/g,""))||0;}
 
 (function(){
-  const elEdad=document.getElementById("edad");
-  for(let a=18;a<=85;a++){
-    const o=document.createElement("option"); o.value=a; o.textContent=a;
-    if(a===30)o.selected=!0; elEdad.appendChild(o);
-  }
+  const elEdad=document.getElementById("edad");
+  for(let a=18;a<=85;a++){
+    const o=document.createElement("option"); o.value=a; o.textContent=a;
+    if(a===30)o.selected=!0; elEdad.appendChild(o);
+  }
 })();
 
 function toggleDetails() {
-  document.getElementById("infoContainer").classList.toggle("is-open");
+  document.getElementById("infoContainer").classList.toggle("is-open");
 }
 
 function obtenerSpread(destino, plazo) {
-  if (destino === "CAPITAL_TRABAJO") {
-    if (plazo <= 24) return 28.76;
-    if (plazo <= 36) return 32.76;
-    return null;
-  } else {
-    if (plazo <= 24) return 30.49;
-    if (plazo <= 36) return 34.49;
-    if (plazo <= 48) return 35.99;
-    if (plazo <= 60) return 36.59;
-    return null;
-  }
+  if (destino === "CAPITAL_TRABAJO") {
+    if (plazo <= 24) return 28.76;
+    if (plazo <= 36) return 32.76;
+    return null;
+  } else {
+    if (plazo <= 24) return 30.49;
+    if (plazo <= 36) return 34.49;
+    if (plazo <= 48) return 35.99;
+    if (plazo <= 60) return 36.59;
+    return null;
+  }
 }
 
 function obtenerPctMipyme(monto) {
-  const limite = CONFIG.SMMLV * CONFIG.MIPYME_LIMITE_SMMLV;
-  return (monto <= limite) ? 0.006045 : 0.003675;
+  const limite = CONFIG.SMMLV * CONFIG.MIPYME_LIMITE_SMMLV;
+  return (monto <= limite) ? 0.006045 : 0.003675;
 }
 
 function calcularYRenderizar(){
-  const m = limpiarNumero(document.getElementById("monto").value);
-  const pl = parseInt(document.getElementById("plazo").value)||0;
-  const ibr = parseFloat(document.getElementById("ibr").value)||0;
-  const dest = document.getElementById("destino").value;
-  const g = document.getElementById("genero").value;
-  const e = parseInt(document.getElementById("edad").value)||0;
-  const aplicaM = document.getElementById("aplicaMipyme").value === "SI";
+  const m = limpiarNumero(document.getElementById("monto").value);
+  const pl = parseInt(document.getElementById("plazo").value)||0;
+  const ibr = parseFloat(document.getElementById("ibr").value)||0;
+  const dest = document.getElementById("destino").value;
+  const g = document.getElementById("genero").value;
+  const e = parseInt(document.getElementById("edad").value)||0;
+  const aplicaM = document.getElementById("aplicaMipyme").value === "SI";
 
-  const errorM = document.getElementById("errorMonto");
-  const errorP = document.getElementById("errorPlazo");
-  
-  let valid = true;
-  if (m > 0 && (m < CONFIG.LIMITES.MIN || m > CONFIG.LIMITES.MAX)) {
-    errorM.style.display = "block";
-    valid = false;
-  } else { errorM.style.display = "none"; }
+  const errorM = document.getElementById("errorMonto");
+  const errorP = document.getElementById("errorPlazo");
+  
+  let valid = true;
+  if (m > 0 && (m < CONFIG.LIMITES.MIN || m > CONFIG.LIMITES.MAX)) {
+    errorM.style.display = "block";
+    valid = false;
+  } else { errorM.style.display = "none"; }
 
-  const spread = obtenerSpread(dest, pl);
-  if (pl > 0 && spread === null) {
-    errorP.style.display = "block";
-    valid = false;
-  } else { errorP.style.display = "none"; }
+  const spread = obtenerSpread(dest, pl);
+  if (pl > 0 && spread === null) {
+    errorP.style.display = "block";
+    valid = false;
+  } else { errorP.style.display = "none"; }
 
-  if(!valid || !m || !pl || spread === null){
-    document.getElementById("infoContainer").style.display="none";
-    document.getElementById("tablaResultados").style.display="none";
-    return;
-  }
+  if(!valid || !m || !pl || spread === null){
+    document.getElementById("infoContainer").style.display="none";
+    document.getElementById("tablaResultados").style.display="none";
+    return;
+  }
 
-  const tasaEA = ibr + spread;
-  const tem = Math.pow(1 + tasaEA/100, 1/12) - 1;
-  const capitalFijo = m / pl;
-  const factorSeguro = (g === "M" ? factoresSeguroVida.M[e] : factoresSeguroVida.F[e]) || 0.377;
-  const seguroMensual = Math.ceil(m * (factorSeguro / 1000));
-  const pctM = aplicaM ? obtenerPctMipyme(m) : 0;
+  const tasaEA = ibr + spread;
+  const tem = Math.pow(1 + tasaEA/100, 1/12) - 1;
+  const capitalFijo = m / pl;
+  const factorSeguro = (g === "M" ? factoresSeguroVida.M[e] : factoresSeguroVida.F[e]) || 0.377;
+  const seguroMensual = Math.ceil(m * (factorSeguro / 1000));
+  const pctM = aplicaM ? obtenerPctMipyme(m) : 0;
 
-  let saldo = m;
-  let totalCuota = 0, totalCapital = 0, totalInteres = 0, totalSeguro = 0, totalMipyme = 0;
-  let primeraCuota = 0, ultimaCuota = 0;
+  let saldo = m;
+  let totalCuota = 0, totalCapital = 0, totalInteres = 0, totalSeguro = 0, totalMipyme = 0;
+  let primeraCuota = 0, ultimaCuota = 0, mipymeMes1 = 0;
 
-  const tbody = document.querySelector("#tablaResultados tbody");
-  tbody.innerHTML = "";
+  const tbody = document.querySelector("#tablaResultados tbody");
+  tbody.innerHTML = "";
 
-  for(let i=1; i<=pl; i++){
-    const interesMes = saldo * tem;
-    const mipymeMes = aplicaM ? (saldo * (pctM * 1.19)) : 0;
-    const cuotaTotalMes = capitalFijo + interesMes + seguroMensual + mipymeMes;
-    
-    if(i === 1) primeraCuota = cuotaTotalMes;
-    if(i === pl) ultimaCuota = cuotaTotalMes;
+  for(let i=1; i<=pl; i++){
+    const interesMes = saldo * tem;
+    const mipymeMes = aplicaM ? (saldo * (pctM * 1.19)) : 0;
+    const cuotaTotalMes = capitalFijo + interesMes + seguroMensual + mipymeMes;
+    
+    if(i === 1) {
+      primeraCuota = cuotaTotalMes;
+      mipymeMes1 = mipymeMes;
+    }
+    if(i === pl) ultimaCuota = cuotaTotalMes;
 
-    totalCuota += cuotaTotalMes;
-    totalCapital += capitalFijo;
-    totalInteres += interesMes;
-    totalSeguro += seguroMensual;
-    totalMipyme += mipymeMes;
+    totalCuota += cuotaTotalMes;
+    totalCapital += capitalFijo;
+    totalInteres += interesMes;
+    totalSeguro += seguroMensual;
+    totalMipyme += mipymeMes;
 
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${i}</td><td style="font-weight:700">${formatoCOP(cuotaTotalMes)}</td><td>${formatoCOP(capitalFijo)}</td><td>${formatoCOP(interesMes)}</td><td>${formatoCOP(mipymeMes)}</td><td>${formatoCOP(seguroMensual)}</td><td>${formatoCOP(Math.max(0, saldo-capitalFijo))}</td>`;
-    tbody.appendChild(tr);
-    saldo -= capitalFijo;
-  }
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${i}</td><td style="font-weight:700">${formatoCOP(cuotaTotalMes)}</td><td>${formatoCOP(capitalFijo)}</td><td>${formatoCOP(interesMes)}</td><td>${formatoCOP(mipymeMes)}</td><td>${formatoCOP(seguroMensual)}</td><td>${formatoCOP(Math.max(0, saldo-capitalFijo))}</td>`;
+    tbody.appendChild(tr);
+    saldo -= capitalFijo;
+  }
 
-  document.getElementById("filaTotales").innerHTML = `
-    <td style="text-align:left">TOTAL</td>
-    <td>${formatoCOP(totalCuota)}</td>
-    <td>${formatoCOP(totalCapital)}</td>
-    <td>${formatoCOP(totalInteres)}</td>
-    <td>${formatoCOP(totalMipyme)}</td>
-    <td>${formatoCOP(totalSeguro)}</td>
-    <td>-</td>
-  `;
+  document.getElementById("filaTotales").innerHTML = `
+    <td style="text-align:left">TOTAL</td>
+    <td>${formatoCOP(totalCuota)}</td>
+    <td>${formatoCOP(totalCapital)}</td>
+    <td>${formatoCOP(totalInteres)}</td>
+    <td>${formatoCOP(totalMipyme)}</td>
+    <td>${formatoCOP(totalSeguro)}</td>
+    <td>-</td>
+  `;
 
-  document.getElementById("infoContainer").style.display="block";
-  document.getElementById("cuotaInicial").textContent = formatoCOP(primeraCuota);
-  document.getElementById("spreadValue").textContent = `+${spread.toFixed(2)}%`;
-  document.getElementById("tasaEA").textContent = `${tasaEA.toFixed(2)}% EA`;
-  document.getElementById("abonoFijo").textContent = formatoCOP(capitalFijo);
-  document.getElementById("seguroResumen").textContent = formatoCOP(seguroMensual);
-  document.getElementById("mipymeResumen").textContent = aplicaM ? formatoCOP(m * (pctM * 1.19)) : "$0";
-  document.getElementById("cuotaFinal").textContent = formatoCOP(ultimaCuota);
+  document.getElementById("infoContainer").style.display="block";
+  document.getElementById("cuotaInicial").textContent = formatoCOP(primeraCuota);
+  document.getElementById("spreadValue").textContent = `+${spread.toFixed(2)}%`;
+  document.getElementById("tasaEA").textContent = `${tasaEA.toFixed(2)}% EA`;
+  document.getElementById("abonoFijo").textContent = formatoCOP(capitalFijo);
+  document.getElementById("seguroResumen").textContent = formatoCOP(seguroMensual);
+  document.getElementById("mipymeResumen").textContent = aplicaM ? formatoCOP(mipymeMes1) : "$0";
+  document.getElementById("cuotaFinal").textContent = formatoCOP(ultimaCuota);
 
-  document.getElementById("tablaResultados").style.display="table";
+  document.getElementById("tablaResultados").style.display="table";
 }
 
 document.querySelectorAll("input, select").forEach(el => {
-  el.addEventListener("input", (e) => {
-    if(e.target.id === "monto"){
-      const v = limpiarNumero(e.target.value);
-      e.target.value = v ? formatoCOP(v) : "";
-    }
-    calcularYRenderizar();
-  });
+  el.addEventListener("input", (e) => {
+    if(e.target.id === "monto"){
+      const v = limpiarNumero(e.target.value);
+      e.target.value = v ? formatoCOP(v) : "";
+    }
+    calcularYRenderizar();
+  });
 });
 </script>
 </body>
