@@ -241,7 +241,7 @@
         <!-- Campos para Modo Manual -->
         <div class="modo-manual hidden">
           <label>Tasa Bancóldex (%)</label>
-          <input id="spreadManual" type="number" step="0.01" min="0.01" placeholder="Ej: 28.76" />
+          <input id="spreadManual" type="number" step="0.01" min="0.01" placeholder="Ej: 9.35" />
         </div>
 
         <!-- Campos Comunes -->
@@ -251,17 +251,17 @@
         </div>
         <div>
           <label>Plazo (Meses)</label>
-          <input id="plazo" type="number" inputmode="numeric" min="1" max="60" value="12" required />
+          <input id="plazo" type="number" inputmode="numeric" min="1" max="60" value="36" required />
         </div>
         <div>
-          <label>IBR Actual (%)</label>
-          <input id="ibr" type="number" step="0.01" value="10.50" required />
+          <label>IBR Nominal (%)</label>
+          <input id="ibr" type="number" step="0.01" value="11.40" required />
         </div>
         <div>
           <label>¿Aplica MIPYME?</label>
           <select id="aplicaMipyme">
-            <option value="SI">SÍ</option>
             <option value="NO">NO</option>
+            <option value="SI">SÍ</option>
           </select>
         </div>
         <div>
@@ -293,7 +293,7 @@
       </button>
       
       <div class="info-details" id="infoDetails">
-        <div class="detail-item"><strong>IBR + Tasa Bancóldex (EA)</strong><span id="tasaTotal"></span></div>
+        <div class="detail-item"><strong>Tasa Pactada (EA)</strong><span id="tasaTotal"></span></div>
         <div class="detail-item"><strong>Abono a Capital Fijo</strong><span id="abonoCapital"></span></div>
         <div class="detail-item"><strong>Comisión MIPYME (Año 1)</strong><span id="mipymeMes1"></span></div>
         <div class="detail-item"><strong>Seguro de Vida (Mes)</strong><span id="seguroMensual"></span></div>
@@ -425,13 +425,19 @@ function calcularSeguroVida(monto, genero, edad, plazo) {
   return Math.ceil(monto * (factorBase / 1000));
 }
 
-function calcularPrimeraCuotaAuxiliar(m, pl, dest, modo, spreadMan, ibr, g, e, pctM) {
+function calcularPrimeraCuotaAuxiliar(m, pl, dest, modo, spreadMan, ibrNominal, g, e, pctM) {
   const spread = (modo === "AUTO") ? obtenerSpread(dest, pl) : spreadMan;
-  if (spread === null) return null; // Plazo inválido para el destino
+  if (spread === null) return null; 
   
-  const tasaEA = ibr + spread;
-  const tem = Math.pow(1 + tasaEA/100, 1/12) - 1;
-  const capitalFijo = m / pl;
+  // 1. Convertir IBR Nominal a Efectivo Anual (EA)
+  const ibrEA = Math.pow(1 + (ibrNominal/100)/12, 12) - 1;
+  // 2. Aplicar fórmula del Banco: Tasa Total EA = ((1+IBR EA) * (1+Spread)) - 1
+  const spreadFactor = spread / 100;
+  const tasaEADecimal = ((1 + ibrEA) * (1 + spreadFactor)) - 1;
+  // 3. Obtener Tasa Efectiva Mensual (TEM)
+  const tem = Math.pow(1 + tasaEADecimal, 1/12) - 1;
+  
+  const capitalFijo = Math.round((m / pl) / 1000) * 1000; // Redondeo al mil más cercano
   const seguroMensual = calcularSeguroVida(m, g, e, pl);
   const mipymeMes1 = m * (pctM * 1.19);
   const interesMes1 = m * tem;
@@ -443,7 +449,7 @@ function calcularYRenderizar(){
   const modo = document.getElementById("modoCalculo").value;
   const dest = document.getElementById("destino").value;
   const spreadMan = parseFloat(document.getElementById("spreadManual").value) || 0;
-  const ibr = parseFloat(document.getElementById("ibr").value) || 0;
+  const ibrNominal = parseFloat(document.getElementById("ibr").value) || 0;
   const m = limpiarNumero(document.getElementById("monto").value);
   const pl = parseInt(document.getElementById("plazo").value) || 0;
   const g = document.getElementById("genero").value;
@@ -479,7 +485,7 @@ function calcularYRenderizar(){
     return;
   }
 
-  if(!m || !pl || !ibr) return;
+  if(!m || !pl || !ibrNominal) return;
 
   const limiteSmmlv = CONFIG.SMMLV * CONFIG.MIPYME_LIMITE_SMMLV;
   const pctMipyme = aplicaM ? (m <= limiteSmmlv ? 0.006045 : 0.003675) : 0;
@@ -490,7 +496,7 @@ function calcularYRenderizar(){
   let botonesHtml = "";
   
   plazosComparativa.forEach(pMeses => {
-    const cuotaComp = calcularPrimeraCuotaAuxiliar(m, pMeses, dest, modo, spreadMan, ibr, g, e, pctMipyme);
+    const cuotaComp = calcularPrimeraCuotaAuxiliar(m, pMeses, dest, modo, spreadMan, ibrNominal, g, e, pctMipyme);
     if (cuotaComp !== null) {
       botonesHtml += `
         <button type="button" class="comparativa-card ${pMeses === pl ? 'selected' : ''}" onclick="seleccionarPlazoRapido(${pMeses})">
@@ -503,28 +509,35 @@ function calcularYRenderizar(){
   gridComp.innerHTML = botonesHtml;
   document.getElementById("comparativaContainer").style.display="block";
 
-  // Cálculos principales
-  const tasaEA = ibr + spread;
-  const tem = Math.pow(1 + tasaEA/100, 1/12) - 1;
-  const capitalFijo = m / pl;
+  // Lógica Financiera Corregida
+  const ibrEA = Math.pow(1 + (ibrNominal/100)/12, 12) - 1;
+  const spreadFactor = spread / 100;
+  const tasaEADecimal = ((1 + ibrEA) * (1 + spreadFactor)) - 1;
+  const tasaEA_Visual = tasaEADecimal * 100;
+  const tem = Math.pow(1 + tasaEADecimal, 1/12) - 1;
+  
+  const capitalFijoBase = Math.round((m / pl) / 1000) * 1000; 
   const seguroMensual = calcularSeguroVida(m, g, e, pl);
 
   let saldo = m;
   let baseMipymeAnual = m, proximaBaseMipyme = m;
   let totalCuota = 0, totalCapital = 0, totalInteres = 0, totalMipyme = 0, totalSeguro = 0;
   let primeraCuotaFinal = 0, mipymeMes1 = 0, interesMes1 = 0;
+  let capitalFijoReal = 0;
 
   const filasHTML = [];
 
   for(let i=1; i<=pl; i++){
-    // Anualización MIPYME: Actualizar base en los meses 13, 25, 37...
     if (i > 1 && (i - 1) % 12 === 0) {
       baseMipymeAnual = proximaBaseMipyme;
     }
 
+    // La última cuota ajusta cualquier diferencia por el redondeo del capital
+    capitalFijoReal = (i === pl) ? saldo : capitalFijoBase;
+
     const interes = saldo * tem;
     const mipymeMes = aplicaM ? (baseMipymeAnual * (pctMipyme * 1.19)) : 0;
-    const cuotaTotalMes = capitalFijo + interes + mipymeMes + seguroMensual;
+    const cuotaTotalMes = capitalFijoReal + interes + mipymeMes + seguroMensual;
     
     if(i === 1) {
       primeraCuotaFinal = cuotaTotalMes;
@@ -533,7 +546,7 @@ function calcularYRenderizar(){
     }
 
     totalCuota += cuotaTotalMes; 
-    totalCapital += capitalFijo; 
+    totalCapital += capitalFijoReal; 
     totalInteres += interes;
     totalMipyme += mipymeMes; 
     totalSeguro += seguroMensual;
@@ -542,17 +555,16 @@ function calcularYRenderizar(){
       <tr>
         <td style="text-align:left">${i}</td>
         <td style="font-weight:700">${formatoCOP(cuotaTotalMes)}</td>
-        <td>${formatoCOP(capitalFijo)}</td>
+        <td>${formatoCOP(capitalFijoReal)}</td>
         <td>${formatoCOP(interes)}</td>
         <td>${formatoCOP(mipymeMes)}</td>
         <td>${formatoCOP(seguroMensual)}</td>
-        <td>${formatoCOP(Math.max(0, saldo - capitalFijo))}</td>
+        <td>${formatoCOP(Math.max(0, saldo - capitalFijoReal))}</td>
       </tr>
     `);
     
-    saldo -= capitalFijo;
+    saldo -= capitalFijoReal;
     
-    // Guardar el saldo al final del mes 12, 24, 36... para aplicarlo al año siguiente
     if (i % 12 === 0) {
       proximaBaseMipyme = saldo;
     }
@@ -565,8 +577,8 @@ function calcularYRenderizar(){
   document.getElementById("infoContainer").style.display="block";
   document.getElementById("labelCuotaPlazo").textContent = `💰 Primera Cuota Aprox. (${pl} Meses)`;
   document.getElementById("cuotaInicial").textContent = formatoCOP(primeraCuotaFinal);
-  document.getElementById("tasaTotal").textContent = `${ibr.toFixed(2)}% IBR + ${spread.toFixed(2)}% = ${tasaEA.toFixed(2)}% EA`;
-  document.getElementById("abonoCapital").textContent = formatoCOP(capitalFijo);
+  document.getElementById("tasaTotal").textContent = `IBR EA ${(ibrEA*100).toFixed(2)}% * T.Adicional ${spread.toFixed(2)}% = ${tasaEA_Visual.toFixed(3)}% EA`;
+  document.getElementById("abonoCapital").textContent = formatoCOP(capitalFijoBase);
   document.getElementById("mipymeMes1").textContent = formatoCOP(mipymeMes1);
   document.getElementById("seguroMensual").textContent = formatoCOP(seguroMensual);
   document.getElementById("interesMes1").textContent = formatoCOP(interesMes1);
